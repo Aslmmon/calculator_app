@@ -1,0 +1,30 @@
+
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:android)
+
+platform :android do
+    desc "upload debug apk to Firebase Distribution"
+    gradle(
+        task: 'clean assemble',
+        build_type: 'Debug'
+    )
+    lane :mirDebug do
+        firebase_app_distribution(
+            app: "1:456514277242:android:aee773699191b0d29a90c3",
+            testers: "aslm.monir@code95.info,
+            a.abdelaal@code95.info,
+            amr.saleh@code95.info,
+            Eman@code95.com,
+            ahmed.abdelaziz@code95.com,
+            osama@code95.com",
+            release_notes: "What's new in this version ?!  -  deployed issues ",
+            firebase_cli_path: "/usr/local/bin/firebase",
+            apk_path: "../build/app/outputs/flutter-apk/app-debug.apk"
+        )
+    end
+end
+
+
