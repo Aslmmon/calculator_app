@@ -7,76 +7,99 @@ import 'package:app_resources/src/theme_manager.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class MyApp extends StatefulWidget {
+  /// This is Used to make Only singleton For MyAppClass
 
-  // This widget is the root of your application.
+  MyApp._singleInstance();
+
+  static final MyApp _instance = MyApp._singleInstance();
+
+  factory MyApp() => _instance;
+
   @override
-  Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-        create: (_) => ThemeViewModel(),
-        child: Consumer<ThemeViewModel>(builder: (context, ThemeViewModel themeViewModel, child) {
-          return MaterialApp(
-              title: AppConstants.applicationName,
-              debugShowCheckedModeBanner: false,
-              theme: themeViewModel.isDark
-                  ? getApplicationTheme(appTheme: AppTheme.dark_theme)
-                  : getApplicationTheme(appTheme: AppTheme.light_theme),
-              home: const MyCalcApp());
-        }));
-  }
+  State<MyApp> createState() => _MyAppState();
 }
 
-class MyCalcApp extends StatelessWidget {
+class _MyAppState extends State<MyApp> {
+  @override
+  Widget build(BuildContext context) => MultiProvider(
+          providers: [
+            ChangeNotifierProvider<ThemeViewModel>(
+              create: (_) => ThemeViewModel(),
+            ),
+            ChangeNotifierProvider<CalculatorViewModel>(
+              create: (_) => CalculatorViewModel(),
+            ),
+          ],
+          child: Consumer<ThemeViewModel>(
+              builder: (context, ThemeViewModel themeViewModel, child) {
+            return MaterialApp(
+                title: AppConstants.applicationName,
+                debugShowCheckedModeBanner: false,
+                theme: themeViewModel.isDark
+                    ? getApplicationTheme(appTheme: AppTheme.dark_theme)
+                    : getApplicationTheme(appTheme: AppTheme.light_theme),
+                home: const MyCalcApp());
+          }));
+}
+
+class MyCalcApp extends StatefulWidget {
   const MyCalcApp({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final CalculatorViewModel _calculatorViewModel = CalculatorViewModel();
+  State<MyCalcApp> createState() => _MyCalcAppState();
+}
 
-    return Scaffold(
-      body: SafeArea(
-        child: Container(
-          color: Theme.of(context).primaryColor,
-          child: Column(
-            children: [
-              ThemeView(),
-              Expanded(flex: 1, child: Center(child: CustomButton())),
-              Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColorLight,
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(AppSizes.s25),
-                          topRight: Radius.circular(AppSizes.s25))),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: GridView.builder(
-                      itemCount: 20,
-                      itemBuilder: (context, list) {
-                        return CustomButton();
-                      },
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 5,
-                          crossAxisSpacing: 10.0,
-                          mainAxisSpacing: 10.0),
-                    ),
+class _MyCalcAppState extends State<MyCalcApp> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(body: SafeArea(child:
+        Consumer<CalculatorViewModel>(builder: (context, calcviewModel, child) {
+      return Container(
+        color: Theme.of(context).primaryColor,
+        child: Column(
+          children: [
+            ThemeView(),
+            Flexible(flex: 1, child: Center(child: Container())),
+            Flexible(
+              flex: 2,
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColorLight,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(AppSizes.s25),
+                        topRight: Radius.circular(AppSizes.s25))),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: GridView.builder(
+                    itemCount: calcviewModel.buttons().length,
+                    itemBuilder: (context, index) {
+                      return CustomButton(
+                        buttonTextsView: calcviewModel.buttons()[index],
+                      );
+                    },
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 4,
+                        crossAxisSpacing: 10.0,
+                        mainAxisSpacing: 10.0),
                   ),
                 ),
-              )
-            ],
-          ),
+              ),
+            )
+          ],
         ),
-      ),
-    );
+      );
+    })));
   }
 }
 
 class CustomButton extends StatelessWidget {
-  CustomButton({Key? key}) : super(key: key);
+  ButtonTextsView buttonTextsView;
+
+  CustomButton({required this.buttonTextsView}) : super();
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +108,7 @@ class CustomButton extends StatelessWidget {
         height: 50,
         child: Center(
             child: Text(
-          "1",
+          buttonTextsView.btnText,
           style: TextStyle(color: Theme.of(context).focusColor),
         )));
   }
