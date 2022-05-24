@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 
 class ColorManager {
-  static Color primary = const Color(0xfffc6011);
+  static Color primary = const Color(0xffffffff);
+  static Color secondary = const Color(0xffeeeded);
+
   static Color darkGrey = const Color(0xff232222);
   static Color grey = const Color(0xff4a4b4d);
   static Color greySubtitle = const Color(0xff7c7d7e);

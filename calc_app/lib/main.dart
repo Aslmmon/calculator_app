@@ -29,28 +29,46 @@ class MyCalcApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final CalculatorViewModel _calculatorViewModel = CalculatorViewModel();
 
-
-
-
-
-
     return Scaffold(
-      body: Column(
-        children: [
-          Expanded(flex: 1, child: Center(child: CustomButton())),
-          Expanded(
-            child: GridView.builder(
-              itemCount: 20,
-              itemBuilder: (context, list) {
-                return CustomButton();
-              },
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 5,
-                  crossAxisSpacing: 10.0,
-                  mainAxisSpacing: 10.0),
-            ),
-          )
-        ],
+      body: SafeArea(
+        child: Container(
+          color: ColorManager.primary,
+          child: Column(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                    color: ColorManager.secondary,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(AppSizes.s25),
+                        topRight: Radius.circular(AppSizes.s25))),
+                child: CustomButton(),
+              ),
+              Expanded(flex: 1, child: Center(child: CustomButton())),
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: ColorManager.secondary,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(AppSizes.s25),
+                          topRight: Radius.circular(AppSizes.s25))),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GridView.builder(
+                      itemCount: 20,
+                      itemBuilder: (context, list) {
+                        return CustomButton();
+                      },
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 5,
+                          crossAxisSpacing: 10.0,
+                          mainAxisSpacing: 10.0),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
       ),
       backgroundColor: ColorManager.greySubtitle,
     );
