@@ -4,5 +4,6 @@ class AppConstants{
   static const int zero= 0;
   static const String baseUrl = "https://z8rwq.mocklab.io/";
   static const int apiTimeOut = 60 *1000;
+  static const applicationName= 'Aslmmovic Calculator';
 
 }

@@ -8,3 +8,5 @@ export 'src/color_manager.dart';
 export 'src/strings_manager.dart';
 export 'src/values_manager.dart';
 export 'src/app_icons.dart';
+export 'src/theme_manager.dart';
+export 'src/constants_manager.dart';

@@ -1,6 +1,10 @@
 import 'package:app_resources/app_resources.dart';
+import 'package:calc/app/theme_viewmodel.dart';
 import 'package:calc/calculatorViewModel.dart';
+import 'package:calc/main/theme_view.dart';
 import 'package:flutter/material.dart';
+import 'package:app_resources/src/theme_manager.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,13 +16,18 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Calculator App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyCalcApp(),
-    );
+    return ChangeNotifierProvider(
+        create: (_) => ThemeViewModel(),
+        child: Consumer<ThemeViewModel>(
+            builder: (context, ThemeViewModel themeViewModel, child) {
+          return MaterialApp(
+              title: AppConstants.applicationName,
+              debugShowCheckedModeBanner: false,
+              theme: themeViewModel.isDark
+                  ? getApplicationTheme(isLightTheme: false)
+                  : getApplicationTheme(isLightTheme: true),
+              home: const MyCalcApp());
+        }));
   }
 }
 
@@ -35,14 +44,7 @@ class MyCalcApp extends StatelessWidget {
           color: ColorManager.primary,
           child: Column(
             children: [
-              Container(
-                decoration: BoxDecoration(
-                    color: ColorManager.secondary,
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(AppSizes.s25),
-                        topRight: Radius.circular(AppSizes.s25))),
-                child: CustomButton(),
-              ),
+              ThemeView(),
               Expanded(flex: 1, child: Center(child: CustomButton())),
               Expanded(
                 child: Container(
