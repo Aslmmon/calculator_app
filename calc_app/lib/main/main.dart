@@ -24,8 +24,8 @@ class MyApp extends StatelessWidget {
               title: AppConstants.applicationName,
               debugShowCheckedModeBanner: false,
               theme: themeViewModel.isDark
-                  ? getApplicationTheme(isLightTheme: false)
-                  : getApplicationTheme(isLightTheme: true),
+                  ? getApplicationTheme(appTheme: AppTheme.dark_theme)
+                  : getApplicationTheme(appTheme: AppTheme.light_theme),
               home: const MyCalcApp());
         }));
   }
