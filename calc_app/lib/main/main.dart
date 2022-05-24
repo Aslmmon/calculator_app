@@ -18,8 +18,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
         create: (_) => ThemeViewModel(),
-        child: Consumer<ThemeViewModel>(
-            builder: (context, ThemeViewModel themeViewModel, child) {
+        child: Consumer<ThemeViewModel>(builder: (context, ThemeViewModel themeViewModel, child) {
           return MaterialApp(
               title: AppConstants.applicationName,
               debugShowCheckedModeBanner: false,
@@ -41,7 +40,7 @@ class MyCalcApp extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Container(
-          color: ColorManager.primary,
+          color: Theme.of(context).primaryColor,
           child: Column(
             children: [
               ThemeView(),
@@ -49,7 +48,7 @@ class MyCalcApp extends StatelessWidget {
               Expanded(
                 child: Container(
                   decoration: BoxDecoration(
-                      color: ColorManager.secondary,
+                      color: Theme.of(context).primaryColorLight,
                       borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(AppSizes.s25),
                           topRight: Radius.circular(AppSizes.s25))),
@@ -72,7 +71,6 @@ class MyCalcApp extends StatelessWidget {
           ),
         ),
       ),
-      backgroundColor: ColorManager.greySubtitle,
     );
   }
 }
@@ -85,11 +83,10 @@ class CustomButton extends StatelessWidget {
     return Container(
         width: 50,
         height: 50,
-        decoration: BoxDecoration(
-            border: Border.all(
-              color: ColorManager.grey,
-            ),
-            borderRadius: BorderRadius.all(Radius.circular(10))),
-        child: Center(child: Text("1")));
+        child: Center(
+            child: Text(
+          "1",
+          style: TextStyle(color: Theme.of(context).focusColor),
+        )));
   }
 }

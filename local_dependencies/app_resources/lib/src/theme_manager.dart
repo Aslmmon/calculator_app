@@ -24,9 +24,9 @@ ThemeData getApplicationTheme({required AppTheme appTheme}) {
   return appTheme == AppTheme.light_theme
       ? ThemeData(
           primaryColor: ColorManager.primary,
-          primaryColorLight: ColorManager.primary,
-          disabledColor: ColorManager.grey,
-          splashColor: ColorManager.darkGrey,
+          primaryColorLight: ColorManager.secondary,
+          focusColor: ColorManager.textColor,
+          indicatorColor: ColorManager.normalCaluclationsColor,
           //Ripple Effect
           /**
        * card Theme
@@ -105,10 +105,11 @@ ThemeData getApplicationTheme({required AppTheme appTheme}) {
                     const BorderRadius.all(Radius.circular(AppSizes.s8))),
           ))
       : ThemeData(
-          primaryColor: ColorManager.primary,
-          primaryColorLight: ColorManager.primary,
-          disabledColor: ColorManager.grey,
-          splashColor: ColorManager.darkGrey,
+          primaryColor: ColorManager.primaryDark,
+          primaryColorLight: ColorManager.secondaryDark,
+      focusColor: ColorManager.textColorDark,
+      indicatorColor: ColorManager.normalCaluclationsColorDark,
+          disabledColor: ColorManager.secondary,
           //Ripple Effect
           /**
        * card Theme
