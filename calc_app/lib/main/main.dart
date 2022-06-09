@@ -5,6 +5,7 @@ import 'package:calc/main/theme_view.dart';
 import 'package:flutter/material.dart';
 import 'package:app_resources/src/theme_manager.dart';
 import 'package:provider/provider.dart';
+import 'package:function_tree/function_tree.dart';
 
 void main() {
   runApp(MyApp());
@@ -54,6 +55,14 @@ class MyCalcApp extends StatefulWidget {
 }
 
 class _MyCalcAppState extends State<MyCalcApp> {
+  final myController = TextEditingController();
+
+  @override
+  void dispose() {
+    myController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: SafeArea(child:
@@ -63,7 +72,27 @@ class _MyCalcAppState extends State<MyCalcApp> {
         child: Column(
           children: [
             ThemeView(),
-            Flexible(flex: 1, child: Center(child: Container())),
+            Flexible(
+                flex: 1,
+                child: Center(
+                    child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextField(
+                      decoration: new InputDecoration(
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(40.0)),
+                        enabledBorder: InputBorder.none,
+                        disabledBorder: InputBorder.none,
+                      ),
+                      controller: myController,
+                      style: TextStyle(color: Theme.of(context).focusColor),
+                      onChanged: (text) {
+                        print('First text field: $text');
+                      },
+                    ),
+                  ],
+                ))),
             Flexible(
               flex: 2,
               child: Container(
@@ -79,6 +108,9 @@ class _MyCalcAppState extends State<MyCalcApp> {
                     itemBuilder: (context, index) {
                       return CustomButton(
                         buttonTextsView: calcviewModel.buttons()[index],
+                        doProduceText: (numbers) {
+                          myController.text = calcviewModel.interpret(myController.text+=numbers, numbers);
+                        },
                       );
                     },
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -97,19 +129,26 @@ class _MyCalcAppState extends State<MyCalcApp> {
 }
 
 class CustomButton extends StatelessWidget {
-  ButtonTextsView buttonTextsView;
+  final ButtonTextsView buttonTextsView;
+  final String? Function(String) doProduceText;
 
-  CustomButton({required this.buttonTextsView}) : super();
+  CustomButton({required this.buttonTextsView, required this.doProduceText})
+      : super();
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: 50,
-        height: 50,
-        child: Center(
-            child: Text(
-          buttonTextsView.btnText,
-          style: TextStyle(color: Theme.of(context).focusColor),
-        )));
+        width: AppSizes.s50,
+        height: AppSizes.s50,
+        child: InkWell(
+          onTap: () {
+            doProduceText(buttonTextsView.btnTextProducted ?? '');
+          },
+          child: Center(
+              child: Text(
+            buttonTextsView.btnText,
+            style: TextStyle(color: Theme.of(context).focusColor),
+          )),
+        ));
   }
 }

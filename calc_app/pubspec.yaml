@@ -15,6 +15,7 @@ dependencies:
   intl: ^0.17.0 # Add this line
 
   flutter_native_splash: ^2.1.0
+  function_tree: ^0.8.12
 
 
   app_resources:
